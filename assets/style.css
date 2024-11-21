@@ -15,13 +15,12 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	border: 0;
-	font-size: 100%;
-	font: inherit;
-	vertical-align: baseline;
+time, mark, audio, video, {
+	all: unset;
+}
+
+a{
+	all: unset;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -131,6 +130,9 @@ li:hover {
 	justify-content: center;
 	gap: 10px;
 	margin-bottom: 30px;
+}
+.filterHide{
+	display: none;
 }
 .button{
 	border: 1px solid #1D6154;
