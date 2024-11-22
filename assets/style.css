@@ -15,12 +15,21 @@ table, caption, tbody, tfoot, thead, tr, th, td,
 article, aside, canvas, details, embed,
 figure, figcaption, footer, header, hgroup,
 menu, nav, output, ruby, section, summary,
-time, mark, audio, video, {
-	all: unset;
+time, mark, audio, video {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	font-size: 100%;
+	font: inherit;
+	vertical-align: baseline;
 }
 
 a{
 	all: unset;
+}
+
+body{
+	background-color: #FFFEF8;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure,
@@ -211,3 +220,51 @@ footer nav ul {
 	margin: 2em
 }
 
+
+
+/* login section */
+#login{
+	height: 70vh;
+}
+
+#email, #password{
+	height: 50px;
+	width: 400px;
+	border: none;
+	background-color: white;
+	box-shadow: 0px 4px 14px 0px #00000017;
+}
+
+#connexion{
+	width: 180px;
+	height: 36px;
+	margin: 10px;
+	border: none;
+}
+
+.login{
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	gap: 30px;
+}
+
+.inputlogin{
+	display: flex;
+	flex-direction: column;
+	gap: 7px;
+}
+
+.submit{
+	display: flex;
+	flex-direction: column;
+	justify-items: center;
+	gap: 20px;
+	align-items: center;
+}
+
+
+.connexionLost{
+	text-decoration: underline;
+}

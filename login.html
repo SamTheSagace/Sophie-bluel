@@ -11,9 +11,9 @@
 	<link rel="stylesheet" href="./assets/style.css">
 	<script src="script.js" defer></script>
 </head>
-<body>
+<body id="loginPage">
 <header>
-	<h1>Sophie Bluel <span>Architecte d'intérieur</span></h1>
+	<a href="index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
 	<nav>
 		<ul>
 			<li>projets</li>
@@ -25,6 +25,22 @@
 </header>
 <main>
     <section id="login">
+		<h2>Login</h2>
+		<form action="" id="formLogin"class="login">
+			<div class="inputlogin">
+				<label for="email">E-mail</label>
+				<input type="text" id="email" name="email" required>
+			</div>
+			<div class="inputlogin">
+				<label for="password">Mot de passe</label>
+				<input type="text" id="password" name="name" required>
+			</div>
+			<div class="submit">
+				<input type="submit" value="se connecter" id="connexion">
+				<a href="#" class="connexionLost">mot de passe oublié</a>
+			</div>			
+		</form>
+
         
     </section>
 </main>
