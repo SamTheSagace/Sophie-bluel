@@ -13,27 +13,29 @@
 </head>
 <body id="loginPage">
 <header>
-	<a href="index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
-	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li><a href="login.html">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
+	<div id="header">
+		<a href="index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
+		<nav>
+			<ul>
+				<li>projets</li>
+				<li>contact</li>
+				<li><a href="login.html">login</a></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</div>
 </header>
 <main>
-    <section id="login">
+    <section id="loginBody" class="loginBody">
 		<h2>Login</h2>
 		<form action="" id="formLogin"class="login">
-			<div class="inputlogin">
+			<div class="inputEmail">
 				<label for="email">E-mail</label>
 				<input type="text" id="email" name="email" required>
 			</div>
-			<div class="inputlogin">
+			<div class="inputPassword">
 				<label for="password">Mot de passe</label>
-				<input type="text" id="password" name="name" required>
+				<input type="password" id="password" name="name" required>
 			</div>
 			<div class="submit">
 				<input type="submit" value="se connecter" id="connexion">

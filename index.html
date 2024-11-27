@@ -9,19 +9,30 @@
 	<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=Work+Sans&display=swap" rel="stylesheet">
 	<meta name="description" content="">
 	<link rel="stylesheet" href="./assets/style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
+        integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./css/style.css">
 	<script src="script.js" defer></script>
 </head>
 <body id="homePage">
 <header>
-	<a href="index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
-	<nav>
-		<ul>
-			<li>projets</li>
-			<li>contact</li>
-			<li><a href="login.html">login</a></li>
-			<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
-		</ul>
-	</nav>
+	<div id="adminHeader" class="hidden">
+		<i class="fa-solid fa-pen-to-square"></i>
+		<p>Mode Édition</p>
+	</div>
+	<div id="header">
+		<a href="index.html"><h1>Sophie Bluel <span>Architecte d'intérieur</span></h1></a>
+		<nav>
+			
+			<ul>
+				<li>projets</li>
+				<li>contact</li>
+				<li><a href="login.html" id="login">login</a></li>
+				<li><img src="./assets/icons/instagram.png" alt="Instagram"></li>
+			</ul>
+		</nav>
+	</div>
 </header>
 <main>
 	<section id="introduction">
@@ -36,12 +47,18 @@
 		</article>
 	</section>
 	<section id="portfolio">
-		<h2>Mes Projets</h2>
-		<div class="filter">
-			<button id="tousButton" class="button"><h3>Tous</h3></button>
-			<button id="objetsButton" class="button"><h3>Objets</h3></button>
-			<button id="appartementButton" class="button"><h3>Appartements</h3></button>
-			<button id="hotelButton" class="button"><h3>Hotels & restaurants</h3></button>
+		<div id="portfolioHead">
+			<h2>Mes Projets</h2>
+			<button id="portfolioModify" class="hidden">
+				<i class="fa-solid fa-pen-to-square"></i>
+				<p>modifier</p>
+			</button>
+		</div>
+		<div id="filter" class="filter">
+			<!-- <button id="tousButton" class="button"><h3>Tous</h3></button>
+			<button id="Objets" class="button"><h3>Objets</h3></button>
+			<button id="Appartements" class="button"><h3>Appartements</h3></button>
+			<button id="Hotels & restaurants" class="button"><h3>Hotels & restaurants</h3></button> -->
 		</div>
 		<div class="gallery">
 			<!-- <figure>
@@ -103,6 +120,44 @@
 			<input type="submit" value="Envoyer">
 		</form>
 	</section>
+
+
+<div id="modalWrap" class="fullModalBackground hidden">
+	<div id="fullModal" class="fullModal">
+		<div class="headerModal">
+			<i  class="fa-solid fa-xmark Quit"></i>
+		</div>
+		<div id="modalGallery" class="modalGallery ">
+			<p>Galerie Photo</p>
+			<div id="containerModalImg"></div>
+			<div class="modalLine"></div>
+			<button id="ajoutButton" class="buttonHover">ajouter une photo</button>
+		</div>
+		<div id="modalAjout" class="modalAjout hidden" >
+			<p>Ajout Photo</p>
+			<form action="" id="formModalAjout" class="formModalAjout">
+				<button id="uploadButton">
+					<div id="uploadButtonWrap">
+						<i class="fa-regular fa-image fa-8x" style="color: #B9C5CC;"></i>
+						<p class="buttonText">+ ajouter une photo</p>
+						<p>jpg, png : 4mo max</p>
+					</div>					
+					<input type="file" name="picture" class="picture" id="picture" onchange="previewFile()" required>
+					<div class="previewModalWrap"><img src="" alt="..." id="previewModal" class="previewModal hidden"></div>
+					
+				</button>
+				<label for="title">titre</label>
+				<input type="text" name="title" id="title" class="zoneForm" required>
+				<label for="category">catégorie</label>
+				<select name="category" id="categories" class="zoneForm" required>
+				</select>
+				<div class="modalLine"></div>
+				<input type="submit" name="ajouterButton" id="ajouterButton" class="button" value="ajouter une photo">
+			</form>
+
+		</div>
+	</div>
+</div>
 </main>
 
 <footer>
