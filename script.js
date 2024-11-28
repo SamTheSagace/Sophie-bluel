@@ -13,17 +13,17 @@ async function getCategories(){
 
 let adminStatue = false
 let loginData = localStorage.getItem("login")
-
+let tokenAdmin = ''
 // to stop function that are page specific
-function pageStopper(targetPage, scriptName) {
-    const currentPage = document.body.id;
-    if (currentPage !== targetPage) {
-        // console.log(`Script ${scriptName} not running. Expected page: ${targetPage}, but on: ${currentPage}`);
-        return true; 
-    }
-    // console.log(scriptName + " should work")
-    return false;
-}
+// function pageStopper(targetPage, scriptName) {
+//     const currentPage = document.body.id;
+//     if (currentPage !== targetPage) {
+//         console.log(`Script ${scriptName} not running. Expected page: ${targetPage}, but on: ${currentPage}`);
+//         return true; 
+//     }
+//     console.log(scriptName + " should work")
+//     return false;
+// }
 
 // checking for admin statue at the start
 
@@ -37,6 +37,8 @@ function tokenCheck(){
             if (parsedData.token) {
                 // console.log("Token found:", parsedData.token);
                 adminStatue = true
+                // console.log(parsedData.token)
+                tokenAdmin = parsedData.token
                 return parsedData.token; // Return the token for use elsewhere
             } else {
                 console.log("Token not found in stored data.");
@@ -51,9 +53,6 @@ function tokenCheck(){
 tokenCheck();
 
 function adminVersion(){
-    if (pageStopper("homePage", "adminVersion")) {
-        return; // Stop execution if not on the target page
-    };
     if(adminStatue){
         document.getElementById("adminHeader").classList.remove("hidden")
         document.getElementById("portfolioModify").classList.remove("hidden")
@@ -78,11 +77,9 @@ let dataCategory = ''
 
 
 async function buttonFilterBuild(){
-    if (pageStopper("homePage", "createGallery")) {
-        return; // Stop execution if not on the target page
-    }
     let categoriesList = ''
     categoriesList = await getCategories()
+    // console.log(categoriesList)
     let allFigures =`
             <button id="tousButton" class="button"><h3>Tous</h3></button>
                 
@@ -92,26 +89,18 @@ async function buttonFilterBuild(){
                 <button id="${categoriesList[i].name}" class="button"><h3>${categoriesList[i].name}</h3>
             `;
     allFigures += button;
+    
     }
-    console.log(allFigures)
+    // console.log(allFigures)
     let filters = document.getElementById("filter");
     filters.innerHTML = allFigures
-
-
 }
 
-
-
-
 //create a gallery at the start
-
 async function createGallery(){
     let buttons = document.querySelectorAll(".button")
     let buttonTrierTous = document.getElementById("tousButton")
 
-    if (pageStopper("homePage", "createGallery")) {
-        return; // Stop execution if not on the target page
-    }
     if(buttonTrierTous.classList.contains("buttonHover") === false){
         buttons.forEach(button => {
             button.classList.remove("buttonHover");
@@ -142,16 +131,7 @@ async function createGallery(){
     }
 };
 
-async function runFunctionOrder(){
-    await buttonFilterBuild();
-    await createGallery();
-    await buttonTrierPage();
-}
-runFunctionOrder();
-
 // when each button is pressed, it recreate the gallery with a filtered version of it
-
-
 async function createFilterGallery(nomButton, nomFiltre){
     let buttons = document.querySelectorAll(".button")
     if(nomButton.classList.contains("buttonHover") === false){
@@ -179,9 +159,6 @@ async function createFilterGallery(nomButton, nomFiltre){
 };
 
 async function buttonTrierPage(){
-    if (pageStopper("homePage", "button.addEventListener")) {
-        return; // Stop execution if not on the target page
-    }
     //filter buttons
     let buttons = document.querySelectorAll(".button")
     let buttonTrierTous = document.getElementById("tousButton")
@@ -206,6 +183,12 @@ async function buttonTrierPage(){
     });
 };
 
+async function runFunctionOrder(){
+    await buttonFilterBuild();
+    await createGallery();
+    await buttonTrierPage();
+}
+runFunctionOrder();
 
 //modal elements
 const modifyButton = document.getElementById("portfolioModify")
@@ -220,16 +203,13 @@ const ajouterButton = document.getElementById("ajouterButton")
 
 //open and close modal
 async function modalHide(){
-    if (pageStopper("homePage", "modal")) {
-        return; // Stop execution if not on the target page
-    };
+    await modalGalleryBuild()
+    await modalFunction();
     if(adminStatue){
         modifyButton.addEventListener("click", function(){
-            modalGalleryBuild()
             modalWrap.classList.remove("hidden")
         });
         ajoutButton.addEventListener("click", function(){
-            modalCategoryBuild()
             modalGallery.classList.add("hidden")
             modalAjout.classList.remove("hidden")
         });
@@ -263,7 +243,7 @@ async function modalGalleryBuild(){
     for (let i = 0; i< dataWork.length; i++ ){
     let figure = `
         <figure class="modalImgWrap">
-            <div class="trashWrap">
+            <div class="trashWrap" class>
                 <i class="fa-solid fa-trash-can delete" style="color: #ffffff;"></i>
             </div> 
             <img src="${dataWork[i].imageUrl}" class="modalImg">
@@ -283,7 +263,7 @@ async function modalCategoryBuild(){
     
     for (let i = 0; i< dataCategory.length; i++ ){
     let figure = `
-        <option value="${dataCategory[i].name}">${dataCategory[i].name}
+        <option value="${dataCategory[i].id}">${dataCategory[i].name}
         </option>       
     `;
     allFigures += figure;
@@ -311,102 +291,75 @@ function previewFile() {
     uploadWrap.classList.add("hidden")
 }
 
+
+
 async function modalFunction(){
-    if (pageStopper("homePage", "modal")) {
-        return; // Stop execution if not on the target page
-    };
-    
     if(adminStatue){ 
-        const inputImg = document.getElementById("picture")
-        const formImg = document.getElementById("picture").files[0]
-        const previewModal = document.getElementById("previewModal")
         const addForm = document.getElementById("formModalAjout")
-        const addPost = JSON.stringify({
-            id: 0,
-            title: "string",
-            imageUrl: "string",
-            categoryId: "string",
-            userId: 0
+        const deleteButtons = document.querySelectorAll(".delete")   
+
+        deleteButtons.forEach(function(deleteButton) {
+            deleteButton.addEventListener("click", async function() {
+                console.log("Deleted"); // Add your deletion logic here
+            });
         });
+
         addForm.addEventListener("submit", async (event) => {
             // On empêche le comportement par défaut
             event.preventDefault();
             let formName = document.getElementById("title").value
             let formCategory = document.getElementById("categories").value
             let formImg = document.getElementById("picture").files[0]
-            console.log(formName);
-            console.log(formCategory);
-            console.log(formImg);
-        })
-    }
-}
-modalFunction();
+            const validTypes = ["image/jpeg", "image/png"];
 
-// Login page
-async function formLogins (){
-    if (pageStopper("loginPage", "formLogin")) {
-        return; // Stop execution if not on the target page
-    };
-    const formLogin = document.getElementById('formLogin');
-
-
-    formLogin.addEventListener("submit", async (event) => {
-        // On empêche le comportement par défaut
-        event.preventDefault();
-        let baliseEmail = document.getElementById("email").value;
-        let balisePassword = document.getElementById("password").value;
-        const loginPost = JSON.stringify({
-            email: baliseEmail,
-            password: balisePassword,
-        });
-        try{
-            const regex = new RegExp("[a-z0-9._-]+@[a-z0-9._-]+\\.[a-z0-9._-]+");
-            const response = await fetch("http://localhost:5678/api/users/login", {
-                method: "POST", // Correct HTTP method
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json", // Add the 'accept' header to match cURL
-                },
-                body: loginPost,
-            });
-            if (!response.ok) {
-                let isEmailValid = regex.test(baliseEmail);
-                if(!isEmailValid){
-                    const errorMessage = document.getElementsByClassName("inputEmail")[0];
-                    let existingError = errorMessage.querySelector(".errorMessage");
-                    if (!existingError) {
-                        const textError = document.createElement("p");
-                        textError.textContent = "Email non conforme";
-                        textError.classList.add("errorMessage");
-                        errorMessage.appendChild(textError);
-                    }
-                };
-                if(response.statusText === "Unauthorized"){
-                    const errorMessage = document.getElementsByClassName("inputPassword")[0];
-                    let existingError = errorMessage.querySelector(".errorMessage");
-                    if (!existingError) {
-                        const textError = document.createElement("p");
-                        textError.textContent = "L'Email ou le mot de passe n'est pas bon";
-                        textError.classList.add("errorMessage");
-                        errorMessage.appendChild(textError);
-                    }
-
-                };
-
+            if (!validTypes.includes(formImg.type)) {
+                console.log("Invalid file type. Please upload a JPG or PNG image.");
                 return;
             }
-            const responseData = await response.json();
-            const responseDataLocal = JSON.stringify(responseData);
-            window.localStorage.setItem("login", responseDataLocal);
-            window.location.href = "index.html";
-        }
-        catch (error){
-            console.error("Error during login:", error);
-        };
 
+            if (formImg.size > 4 * 1024 * 1024) { // 4 MB in bytes
+                console.log("File size exceeds 4 MB. Please upload a smaller image.");
+                return;
+            }
+            if (!formName) {
+                console.log("Title is required.");
+                return;
+            }
+        
+            if (!formCategory || isNaN(parseInt(formCategory))) {
+                console.log("Valid category is required.");
+                return;
+            }
+           
+            try{
+                const formData = new FormData();
+                formData.append("image", formImg); // Attach the image file
+                formData.append("title", formName); // Add title
+                formData.append("category", formCategory);
+                const response = await fetch("http://localhost:5678/api/works", {
+                    method: "POST", // Correct HTTP method
+                    headers: {
+                        "Authorization": `Bearer ${tokenAdmin}`,
+                        "Accept": "application/json", 
+                    },
+                    body: formData,
+                });
+                if (response.ok) {
+                    console.log("Image submitted successfully.");
+                    createGallery();
+                    modalGalleryBuild();
+                } else {
+                    console.log("Error :", response.status, response.statusText);
+                    console.log(tokenAdmin)
+                }
+            }
+            catch (error) {
+                console.error("Error processing image:", error);
+            }
+           
+        });
+    }
+}
 
-    });
-};
-formLogins();
 
 
