@@ -204,7 +204,8 @@ const ajouterButton = document.getElementById("ajouterButton")
 //open and close modal
 async function modalHide(){
     await modalGalleryBuild()
-    await modalFunction();
+    await modalFunctionAdd();
+    await modalFunctionDelete();
     if(adminStatue){
         modifyButton.addEventListener("click", function(){
             modalWrap.classList.remove("hidden")
@@ -239,12 +240,11 @@ async function modalGalleryBuild(){
     dataWork = await getWork()
     let galleryModal = document.getElementById("containerModalImg")
     let allFigures = ''
-
     for (let i = 0; i< dataWork.length; i++ ){
     let figure = `
         <figure class="modalImgWrap">
             <div class="trashWrap" class>
-                <i class="fa-solid fa-trash-can delete" style="color: #ffffff;"></i>
+                <i class="fa-solid fa-trash-can delete" id="${dataWork[i].id}" style="color: #ffffff;"></i>
             </div> 
             <img src="${dataWork[i].imageUrl}" class="modalImg">
         </figure>
@@ -293,17 +293,9 @@ function previewFile() {
 
 
 
-async function modalFunction(){
+async function modalFunctionAdd(){
     if(adminStatue){ 
         const addForm = document.getElementById("formModalAjout")
-        const deleteButtons = document.querySelectorAll(".delete")   
-
-        deleteButtons.forEach(function(deleteButton) {
-            deleteButton.addEventListener("click", async function() {
-                console.log("Deleted"); // Add your deletion logic here
-            });
-        });
-
         addForm.addEventListener("submit", async (event) => {
             // On empêche le comportement par défaut
             event.preventDefault();
@@ -363,3 +355,36 @@ async function modalFunction(){
 
 
 
+async function modalFunctionDelete(){
+    if(adminStatue){ 
+        const deleteButtons = document.querySelectorAll(".delete")   
+        deleteButtons.forEach(function(deleteButton) {
+            deleteButton.addEventListener("click", async function(event) {
+                console.log("Deleted button with id: " + event.target.id);
+                let targetDelete = event.target.id
+                try{
+
+                    const response = await fetch(`http://localhost:5678/api/works/${targetDelete}`, {
+                        method: "delete", // Correct HTTP method
+                        headers: {
+                            "Authorization": `Bearer ${tokenAdmin}`,
+                            "Accept": "application/json", 
+                        },
+                    });
+                    if (response.ok) {
+                        console.log("Image deleted successfully.");
+                        await createGallery(); // Ensure this refreshes the DOM
+                        await modalGalleryBuild(); // Ensure this refreshes the modal DOM
+                        await modalFunctionDelete();
+                    } else {
+                        console.log("Error :", response.status, response.statusText);
+                        console.log(tokenAdmin)
+                    }
+                }
+                catch (error) {
+                    console.error("Error processing image:", error);
+                }
+            });
+        });
+    }
+}
