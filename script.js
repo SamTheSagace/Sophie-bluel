@@ -98,6 +98,8 @@ async function buttonFilterBuild(){
 
 //create a gallery at the start
 async function createGallery(){
+    let dataWorks = await getWork()
+    console.log(dataWorks)
     let buttons = document.querySelectorAll(".button")
     let buttonTrierTous = document.getElementById("tousButton")
 
@@ -106,28 +108,27 @@ async function createGallery(){
             button.classList.remove("buttonHover");
         });
         buttonTrierTous.classList.add("buttonHover")
-        try {
-            dataWork = await getWork()
-            const objetsFiltrer = dataWork.filter(function (work) {
-                return work.category.name === "Objets";
-            });
-            let allFigures =''
-            for (let i = 0; i< dataWork.length; i++ ){
-            let figure = `
-                <figure>
-                    <img src="${dataWork[i].imageUrl}">
-                    <figcaption>${dataWork[i].title}</figcaption>
-                </figure>
-            `;
-            allFigures += figure;
-            }
-            let gallery = document.getElementById("portfolio").querySelector(".gallery")
-            gallery.innerHTML = ''
-            gallery.innerHTML = allFigures
-            return gallery
-        } catch (error) {
-            console.error("Error fetching data:", error);
+    }
+    try {
+        const objetsFiltrer = dataWorks.filter(function (work) {
+            return work.category.name === "Objets";
+        });
+        let allFigures =''
+        for (let i = 0; i< dataWorks.length; i++ ){
+        let figure = `
+            <figure>
+                <img src="${dataWorks[i].imageUrl}">
+                <figcaption>${dataWorks[i].title}</figcaption>
+            </figure>
+        `;
+        allFigures += figure;
         }
+        let gallery = document.getElementById("portfolio").querySelector(".gallery")
+        gallery.innerHTML = ''
+        gallery.innerHTML = allFigures
+        return gallery
+    } catch (error) {
+        console.error("Error fetching data:", error);
     }
 };
 
@@ -206,6 +207,7 @@ async function modalHide(){
     await modalGalleryBuild()
     await modalFunctionAdd();
     await modalFunctionDelete();
+    await modalCategoryBuild();
     if(adminStatue){
         modifyButton.addEventListener("click", function(){
             modalWrap.classList.remove("hidden")
@@ -253,6 +255,7 @@ async function modalGalleryBuild(){
     };
     galleryModal.innerHTML = ''
     galleryModal.innerHTML += allFigures;
+    await modalFunctionDelete();
 };
 
 // call the categories for the form 
@@ -338,8 +341,8 @@ async function modalFunctionAdd(){
                 });
                 if (response.ok) {
                     console.log("Image submitted successfully.");
-                    createGallery();
-                    modalGalleryBuild();
+                    await createGallery();
+                    await modalGalleryBuild();
                 } else {
                     console.log("Error :", response.status, response.statusText);
                     console.log(tokenAdmin)
@@ -363,7 +366,6 @@ async function modalFunctionDelete(){
                 console.log("Deleted button with id: " + event.target.id);
                 let targetDelete = event.target.id
                 try{
-
                     const response = await fetch(`http://localhost:5678/api/works/${targetDelete}`, {
                         method: "delete", // Correct HTTP method
                         headers: {
@@ -375,7 +377,6 @@ async function modalFunctionDelete(){
                         console.log("Image deleted successfully.");
                         await createGallery(); // Ensure this refreshes the DOM
                         await modalGalleryBuild(); // Ensure this refreshes the modal DOM
-                        await modalFunctionDelete();
                     } else {
                         console.log("Error :", response.status, response.statusText);
                         console.log(tokenAdmin)
