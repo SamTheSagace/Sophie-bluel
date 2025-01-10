@@ -366,6 +366,11 @@ footer nav ul {
 	background-color: #B3B3B3;
 	height: 1px;
 	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+.modalLine p{
+	margin-top: 10px;
 }
 
 .modalAjout form{

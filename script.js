@@ -201,6 +201,11 @@ const quitModal = document.querySelector(".Quit")
 const ajoutButton = document.getElementById("ajoutButton")
 const ajouterButton = document.getElementById("ajouterButton")
 
+async function quit(){
+    modalWrap.classList.add("hidden")
+    modalGallery.classList.remove("hidden")
+    modalAjout.classList.add("hidden")
+};
 
 //open and close modal
 async function modalHide(){
@@ -217,11 +222,7 @@ async function modalHide(){
             modalAjout.classList.remove("hidden")
         });
     
-        function quit(){
-            modalWrap.classList.add("hidden")
-            modalGallery.classList.remove("hidden")
-            modalAjout.classList.add("hidden")
-        };
+        
         quitModal.addEventListener("click", function () {
             if(!modalWrap.classList.contains("hidden")){
                 quit()
@@ -276,8 +277,8 @@ async function modalCategoryBuild(){
 };
 
 //handle the inputs to ad
+const uploadWrap = document.getElementById("uploadButtonWrap")
 function previewFile() {
-    const uploadWrap = document.getElementById("uploadButtonWrap")
     const formImg = document.getElementById("picture").files[0]
     const previewModal = document.getElementById("previewModal")
     const reader = new FileReader();  // Event listener for when the file is read
@@ -302,18 +303,23 @@ async function modalFunctionAdd(){
         addForm.addEventListener("submit", async (event) => {
             // On empêche le comportement par défaut
             event.preventDefault();
+            let formImg = document.getElementById("picture").files[0]
             let formName = document.getElementById("title").value
             let formCategory = document.getElementById("categories").value
-            let formImg = document.getElementById("picture").files[0]
+            let errorSpace = document.getElementById("errorSpace")
+            
             const validTypes = ["image/jpeg", "image/png"];
 
             if (!validTypes.includes(formImg.type)) {
                 console.log("Invalid file type. Please upload a JPG or PNG image.");
+                errorSpace.innerHTML = `<p>Invalid file type. Please upload a JPG or PNG image.</p>`
                 return;
+
             }
 
             if (formImg.size > 4 * 1024 * 1024) { // 4 MB in bytes
                 console.log("File size exceeds 4 MB. Please upload a smaller image.");
+                errorSpace.innerHTML = `<p>File size exceeds 4 MB. Please upload a smaller image.</p>`
                 return;
             }
             if (!formName) {
@@ -339,10 +345,16 @@ async function modalFunctionAdd(){
                     },
                     body: formData,
                 });
+
                 if (response.ok) {
                     console.log("Image submitted successfully.");
                     await createGallery();
                     await modalGalleryBuild();
+                    quit()
+                    previewModal.classList.add("hidden")    
+                    uploadWrap.classList.remove("hidden")
+                    formImg.files = ''
+                    addForm.reset()
                 } else {
                     console.log("Error :", response.status, response.statusText);
                     // console.log(tokenAdmin)
