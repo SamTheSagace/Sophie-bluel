@@ -99,7 +99,7 @@ async function buttonFilterBuild(){
 //create a gallery at the start
 async function createGallery(){
     let dataWorks = await getWork()
-    console.log(dataWorks)
+    // console.log(dataWorks)
     let buttons = document.querySelectorAll(".button")
     let buttonTrierTous = document.getElementById("tousButton")
 
@@ -345,7 +345,7 @@ async function modalFunctionAdd(){
                     await modalGalleryBuild();
                 } else {
                     console.log("Error :", response.status, response.statusText);
-                    console.log(tokenAdmin)
+                    // console.log(tokenAdmin)
                 }
             }
             catch (error) {
@@ -363,7 +363,7 @@ async function modalFunctionDelete(){
         const deleteButtons = document.querySelectorAll(".delete")   
         deleteButtons.forEach(function(deleteButton) {
             deleteButton.addEventListener("click", async function(event) {
-                console.log("Deleted button with id: " + event.target.id);
+                // console.log("Deleted button with id: " + event.target.id);
                 let targetDelete = event.target.id
                 try{
                     const response = await fetch(`http://localhost:5678/api/works/${targetDelete}`, {
@@ -379,7 +379,7 @@ async function modalFunctionDelete(){
                         await modalGalleryBuild(); // Ensure this refreshes the modal DOM
                     } else {
                         console.log("Error :", response.status, response.statusText);
-                        console.log(tokenAdmin)
+                        // console.log(tokenAdmin)
                     }
                 }
                 catch (error) {
