@@ -326,11 +326,6 @@ async function modalFunctionAdd(){
                 console.log("Title is required.");
                 return;
             }
-        
-            if (!formCategory || isNaN(parseInt(formCategory))) {
-                console.log("Valid category is required.");
-                return;
-            }
            
             try{
                 const formData = new FormData();
